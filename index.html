@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SynopsisAI</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.4.120/build/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.5.1/mammoth.browser.min.js"></script>
+</head>
+<body>
+    <div id="notification" class="notification">
+        <i class="fas fa-check-circle"></i>
+        <span>Resumen copiado al portapapeles</span>
+    </div>
+    
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <div class="logo">
+                    <i class="fas fa-layer-group"></i>
+                    <span>SynopsisAI</span>
+                </div>
+                <div class="nav-links">
+                    <a href="#" class="nav-link active">Inicio</a>
+                    <a href="#" class="nav-link">Historial</a>
+                    <a href="#" class="nav-link">Premium</a>
+                    <a href="#" class="nav-link">Contacto</a>
+                </div>
+                <button class="theme-toggle" id="themeToggle">
+                    <i class="fas fa-sun"></i>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="hero">
+            <h1>Resumen Inteligente con Tecnología IA</h1>
+            <p>Extrae lo esencial de cualquier contenido en segundos. Ahorra tiempo y mejora tu productividad con nuestra IA de última generación.</p>
+        </section>
+
+        <section class="tabs-container">
+            <div class="tabs-header">
+                <div class="tab active" data-tab="youtube">
+                    <i class="fab fa-youtube"></i> YouTube
+                </div>
+                <div class="tab" data-tab="file">
+                    <i class="fas fa-file-upload"></i> Archivos
+                </div>
+                <div class="tab" data-tab="web">
+                    <i class="fas fa-globe"></i> Página Web
+                </div>
+            </div>
+            
+            <div class="tab-content">
+                <!-- YouTube Tab -->
+                <div class="tab-pane active" id="youtube-tab">
+                    <div class="input-group">
+                        <label for="youtubeUrl">URL de YouTube</label>
+                        <input type="text" id="youtubeUrl" class="input-field" placeholder="https://www.youtube.com/watch?v=...">
+                    </div>
+                    
+                    <div class="summary-options">
+                        <div class="option-btn active" data-style="concise">Resumen conciso</div>
+                        <div class="option-btn" data-style="detailed">Resumen detallado</div>
+                        <div class="option-btn" data-style="bullets">Puntos clave</div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="summaryLength">Longitud del resumen</label>
+                        <input type="range" id="summaryLength" min="1" max="10" value="5" class="input-field">
+                        <div style="display: flex; justify-content: space-between; margin-top: 5px;">
+                            <span>Corto</span>
+                            <span>Medio</span>
+                            <span>Largo</span>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-icon" id="summarizeYoutube">
+                        <i class="fas fa-bolt"></i> Resumir video
+                    </button>
+                    
+                    <div class="progress-container" id="youtubeProgress">
+                        <div class="progress-bar">
+                            <div class="progress" id="youtubeProgressBar"></div>
+                        </div>
+                        <div class="progress-text" id="youtubeProgressText">Procesando...</div>
+                    </div>
+                </div>
+                
+                <!-- File Tab -->
+                <div class="tab-pane" id="file-tab">
+                    <div class="file-upload" id="fileDropArea">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <p>Arrastra y suelta tus archivos aquí</p>
+                        <p class="small">Formatos soportados: PDF, DOCX, TXT, MP4</p>
+                        <button class="btn btn-outline">Seleccionar archivos</button>
+                        <input type="file" id="fileInput" accept=".pdf,.docx,.txt,.mp4" style="display: none;">
+                    </div>
+                    
+                    <div class="input-group" id="fileNameContainer" style="display: none;">
+                        <label>Archivo seleccionado</label>
+                        <div class="input-field" id="fileName">documento.pdf</div>
+                    </div>
+                    
+                    <div class="summary-options">
+                        <div class="option-btn active" data-style="concise">Resumen conciso</div>
+                        <div class="option-btn" data-style="detailed">Resumen detallado</div>
+                        <div class="option-btn" data-style="bullets">Puntos clave</div>
+                    </div>
+                    
+                    <button class="btn btn-icon" id="summarizeFile" disabled>
+                        <i class="fas fa-bolt"></i> Resumir documento
+                    </button>
+                    
+                    <div class="progress-container" id="fileProgress">
+                        <div class="progress-bar">
+                            <div class="progress" id="fileProgressBar"></div>
+                        </div>
+                        <div class="progress-text" id="fileProgressText">Procesando...</div>
+                    </div>
+                </div>
+                
+                <!-- Web Tab -->
+                <div class="tab-pane" id="web-tab">
+                    <div class="input-group">
+                        <label for="webUrl">URL de la página web</label>
+                        <input type="text" id="webUrl" class="input-field" placeholder="https://ejemplo.com/articulo">
+                    </div>
+                    
+                    <div class="summary-options">
+                        <div class="option-btn active" data-style="concise">Resumen conciso</div>
+                        <div class="option-btn" data-style="detailed">Resumen detallado</div>
+                        <div class="option-btn" data-style="bullets">Puntos clave</div>
+                    </div>
+                    
+                    <button class="btn btn-icon" id="summarizeWeb">
+                        <i class="fas fa-bolt"></i> Resumir página web
+                    </button>
+                    
+                    <div class="progress-container" id="webProgress">
+                        <div class="progress-bar">
+                            <div class="progress" id="webProgressBar"></div>
+                        </div>
+                        <div class="progress-text" id="webProgressText">Procesando...</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Results Section -->
+        <section class="results-container" id="resultsContainer">
+            <div class="results-header">
+                <h2>Resumen generado</h2>
+                <div class="export-options">
+                    <button class="btn btn-outline btn-icon" id="copySummary">
+                        <i class="fas fa-copy"></i> Copiar
+                    </button>
+                    <button class="btn btn-outline btn-icon">
+                        <i class="fas fa-download"></i> TXT
+                    </button>
+                    <button class="btn btn-outline btn-icon">
+                        <i class="fas fa-file-pdf"></i> PDF
+                    </button>
+                    <button class="btn btn-outline btn-icon">
+                        <i class="fas fa-file-word"></i> DOCX
+                    </button>
+                </div>
+            </div>
+            
+            <div class="summary-content" id="summaryContent">
+                <!-- Summary will be inserted here -->
+            </div>
+            
+            <div class="ai-suggestions" style="margin-top: 30px;">
+                <h3 style="margin-bottom: 15px;">Sugerencias de IA</h3>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                    <button class="btn btn-outline">Simplificar lenguaje</button>
+                    <button class="btn btn-outline">Expandir puntos clave</button>
+                    <button class="btn btn-outline">Traducir a inglés</button>
+                    <button class="btn btn-outline">Generar preguntas</button>
+                </div>
+            </div>
+        </section>
+        
+        <!-- History Section -->
+        <section class="history-section">
+            <h2 class="section-title">Historial de resúmenes</h2>
+            <div class="container">
+                <div class="history-container" id="historyContainer">
+                    <!-- History cards will be inserted here -->
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-col">
+                    <h3>SynopsisAI</h3>
+                    <p>La solución definitiva para resumir contenido con tecnología de inteligencia artificial de última generación.</p>
+                    <div style="display: flex; gap: 15px; margin-top: 20px;">
+                        <a href="#" style="color: var(--text-light);"><i class="fab fa-twitter"></i></a>
+                        <a href="#" style="color: var(--text-light);"><i class="fab fa-linkedin"></i></a>
+                        <a href="#" style="color: var(--text-light);"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h3>Enlaces</h3>
+                    <ul class="footer-links">
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Inicio</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Funcionalidades</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Precios</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Blog</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h3>Soporte</h3>
+                    <ul class="footer-links">
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> FAQ</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Contacto</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Guías</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> API</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h3>Legal</h3>
+                    <ul class="footer-links">
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Términos</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Privacidad</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Cookies</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                &copy; 2023 SynopsisAI. Todos los derechos reservados.
+            </div>
+        </div>
+    </footer>
+    <script src="script.js"></script>
+</body>
+</html>

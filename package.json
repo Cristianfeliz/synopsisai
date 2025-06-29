@@ -1,0 +1,9 @@
+{
+  "name": "synopsisai",
+  "version": "1.0.0",
+  "type": "module",
+  "dependencies": {
+    "openai": "^4.104.0",
+    "youtube-transcript": "^1.2.1"
+  }
+}
